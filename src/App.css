@@ -13,3 +13,21 @@ body{
 .Title{
     font-size: 26px;
 }
+
+.Profile {
+    display: flex;
+    justify-content: center;
+}
+
+.Profile__photo{
+    width: 150px;
+    height: 150px;
+    border: 2px solid white;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.Profile__info{
+    margin-left: 10px;
+    text-align: left;
+}

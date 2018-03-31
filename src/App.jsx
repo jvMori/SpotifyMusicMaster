@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import {FormGroup, FormControl, Glyphicon, InputGroup } from 'react-bootstrap';
 import Profile from './components/Profile/Profile';
+import Gallery from './components/Gallery/Gallery';
 
 class App extends Component {
 
@@ -9,15 +10,16 @@ class App extends Component {
         super(props);
         this.state = {
             query: '',
-            artist: null
+            artist: null,
+            tracks: []
         }
     }
     search(){
         const BASE_URL = "https://api.spotify.com/v1/search?";
-        const FETCH_URL = `${BASE_URL}q=${this.state.query}&type=artist&limit=1`;
-        const accessToken ='BQB3JyXFzehinCqnDrAuQ6ky6IxsVWH9n1gbIgROn6fLqhp6r7biHcfuRTmoKvyYZzr9VlwfcQV2K4mph0ZwqGAJtc7NzfmMgDRKtBQXB5L93BunxesXSyJM8N4coh3kZDhSSxNTSiiV8_y4RZVtDEc_OeYMyQ&refresh_token=AQDRLRatMfarjXvde5wUuVCzOin6gGuhZDZztXQh3oaKmd5TITsQqNuPCT9a4yRO2flOv7Yis0XkWh82xUv63wZ6ra-fxsS1sLy5xKi079IgHiW1ywT23wA0rbD-bKCMqkc';
+        let FETCH_URL = `${BASE_URL}q=${this.state.query}&type=artist&limit=1`;
+        const accessToken ='BQCJP-BCPAW8JSOS8BZN6QP8dHCVQcE0bvc8QlR30xabqY1rcrDhbSuTuOCK4SJHCU9uSHv8sjB48SiNVdygwYcqPU7b-OuZuUoWfRTG0mJgNBnaMyFY-nCIZyw6-hVvb5kuwZwVF7hHtphWLmrNwXYNVPPKiQ&refresh_token=AQD0qfDBfhRYX7eoWSAx3c4bn1-zQZ3h1LGrWgHMWwZIua5d9IlrNgP4A6exD6JGA4em2GfRDk23BTzuij9bVb6PYMtaCuTXCU4tr_ikaQ5I-4oKFBlFawG4ktWpCufonVU';
+        const ALBUM_URL = 'https://api.spotify.com/v1/artists/';
 
-        console.log(FETCH_URL);
         let myOptions = {
             method: 'GET',
             headers: {
@@ -31,9 +33,18 @@ class App extends Component {
       .then(response => response.json())
       .then(json => {
           const artist = json.artists.items[0];
-          this.setState({artist})
-      });
+          this.setState({artist});
 
+          FETCH_URL = `${ALBUM_URL}${artist.id}/top-tracks?country=PL&`;
+
+          fetch(FETCH_URL, myOptions)
+          .then(response => response.json())
+          .then(json => {
+            console.log(json);
+            const {tracks} = json;
+            this.setState({tracks});
+          });
+      });
     }
 
     render(){
@@ -54,7 +65,7 @@ class App extends Component {
               </InputGroup>
             </FormGroup>
             <Profile artist={this.state.artist} />
-            <div className="Gallery">Gallery</div>
+            <Gallery tracks={this.state.tracks}/>
           </div>;
     }
 }
