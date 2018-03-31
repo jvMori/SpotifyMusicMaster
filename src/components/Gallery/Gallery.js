@@ -9,7 +9,7 @@ class Gallery extends Component {
         return tracks.map((track, index) => {
             let trackSrc = track.album.images[0].url;
             let trackTitle = track.name;
-            return <Track key={index} imgSrc={trackSrc} title={trackTitle} />;
+            return <Track key={index} imgSrc={trackSrc} title={trackTitle} playAudio={track.preview_url} />;
         });
     }
 };
